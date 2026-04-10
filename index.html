@@ -1,0 +1,716 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap');
+:root{
+  --aptos:"Aptos","Segoe UI","Calibri","Atkinson Hyperlegible",sans-serif;
+  --bg:#ffffff;--bg2:#f5f6fa;--bg3:#eceef5;
+  --navy:#1a2d6b;--ink:#1e2235;--mid:#4a5580;--muted:#8a94b0;
+  --accent:#3058c8;--accent2:#4a7fd4;--light:#e8edfb;
+  --gold:#c87d10;--gold-bg:#fdf5e6;
+  --ok:#1e7a40;--ok-bg:#e8f5ec;
+  --ko:#b91c1c;--ko-bg:#fef0f0;
+  --warn:#92600a;--warn-bg:#fffbeb;
+  --rule:#d0d5e8;--border:#c0c6de;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--aptos);background:var(--bg2);color:var(--ink);font-size:16px;line-height:1.7;}
+#app{max-width:860px;margin:0 auto;padding:0 0 5rem;background:var(--bg);}
+.hero{background:var(--navy);padding:2.8rem 2rem 2.5rem;text-align:center;}
+.hero-eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.75rem;}
+.hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.1;margin-bottom:.4rem;color:#fff;}
+.hero-dates{font-size:14px;color:rgba(255,255,255,.55);font-style:italic;margin-bottom:1.25rem;}
+.hero-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.tag{font-size:11px;padding:4px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.65);background:rgba(255,255,255,.07);}
+#topnav{position:sticky;top:0;z-index:200;background:#fff;border-bottom:2px solid var(--rule);padding:0 1rem;display:flex;align-items:center;overflow-x:auto;box-shadow:0 2px 8px rgba(0,0,0,.07);}
+.nav-tab{font-family:var(--aptos);font-size:13px;padding:13px 14px;border:none;background:transparent;cursor:pointer;color:var(--mid);border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .18s;}
+.nav-tab:hover:not(.active){color:var(--navy);background:var(--bg2);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:700;}
+.section{display:none;padding:2rem 1.75rem 1rem;}
+.section.visible{display:block;}
+.sec-title{font-size:1.7rem;font-weight:700;margin-bottom:.25rem;color:var(--navy);}
+.sec-sub{font-size:14px;color:var(--muted);margin-bottom:2rem;font-style:italic;}
+.prose{font-size:15.5px;line-height:1.9;margin-bottom:1.3rem;color:var(--ink);}
+.prose strong{font-weight:700;color:var(--navy);}
+.card{background:var(--bg2);border:1px solid var(--rule);border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;}
+.card-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.55rem;font-weight:700;}
+.quote-wrap{background:var(--light);border-left:4px solid var(--accent2);border-radius:0 10px 10px 0;padding:1.2rem 1.4rem;margin:1.5rem 0;}
+.quote-ref{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;font-weight:700;}
+.quote-text{font-size:1.05rem;font-style:italic;line-height:2;color:var(--ink);}
+.quote-note{font-size:13px;color:var(--mid);margin-top:.8rem;font-style:italic;line-height:1.7;}
+.tl-item{display:flex;gap:1.2rem;margin-bottom:1.4rem;}
+.tl-year{font-size:11px;font-weight:700;color:var(--accent);min-width:52px;padding-top:3px;letter-spacing:.04em;}
+.tl-body{border-left:2px solid var(--rule);padding-left:1.2rem;flex:1;}
+.tl-body b{font-weight:700;display:block;margin-bottom:3px;font-size:15px;color:var(--navy);}
+.tl-body p{font-size:13px;line-height:1.7;color:var(--mid);}
+.cur-card{border:1px solid var(--rule);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.8rem;display:flex;gap:12px;background:var(--bg2);}
+.cur-icon{width:34px;height:34px;flex-shrink:0;border-radius:50%;background:var(--light);border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--accent);font-weight:700;}
+.cur-body strong{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;font-weight:700;}
+.cur-body p{font-size:14px;line-height:1.75;color:var(--ink);}
+.opera-box{border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-bottom:1.4rem;}
+.opera-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--rule);display:flex;align-items:baseline;gap:.75rem;background:var(--bg2);}
+.opera-head h3{font-size:1.05rem;font-weight:700;color:var(--navy);}
+.opera-head span{font-size:12px;color:var(--muted);}
+.opera-body{padding:1.1rem 1.2rem;}
+.opera-body p{font-size:14px;line-height:1.8;margin-bottom:.8rem;color:var(--ink);}
+.opera-body p:last-child{margin-bottom:0;}
+.video-wrapper{border-radius:10px;overflow:hidden;margin:1.5rem 0;border:1px solid var(--rule);background:#000;aspect-ratio:16/9;}
+.video-wrapper video{width:100%;height:100%;display:block;}
+.video-caption{font-size:12px;color:var(--muted);text-align:center;margin-top:.5rem;font-style:italic;}
+.sec-footer{display:flex;justify-content:flex-end;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--rule);}
+.btn-avanti{font-family:var(--aptos);font-size:14px;font-weight:700;padding:11px 26px;border-radius:8px;border:none;cursor:pointer;background:var(--accent);color:#fff;transition:opacity .15s,transform .1s;}
+.btn-avanti:hover{opacity:.88;}
+.btn-avanti:active{transform:scale(.97);}
+.form-wrap{max-width:540px;margin:0 auto;}
+.form-wrap h2{font-size:1.5rem;font-weight:700;margin-bottom:.35rem;color:var(--navy);}
+.form-wrap>p{font-size:15px;color:var(--mid);margin-bottom:1.75rem;line-height:1.7;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.form-group{display:flex;flex-direction:column;gap:7px;}
+.form-group.full{grid-column:1/-1;}
+.form-group label{font-size:13px;font-weight:700;color:var(--ink);}
+.form-group input{font-family:var(--aptos);font-size:15px;padding:11px 13px;border-radius:8px;border:2px solid var(--border);background:var(--bg);color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
+.form-group input::placeholder{color:var(--muted);}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(48,88,200,.12);}
+.form-group input.err-field{border-color:var(--ko);box-shadow:0 0 0 3px rgba(185,28,28,.1);}
+.form-err{font-size:13px;color:var(--ko);display:none;font-weight:700;margin-top:2px;}
+.form-err.show{display:block;}
+.form-info{font-size:12px;color:var(--muted);margin-top:3px;}
+.btn-go{width:100%;padding:13px;border-radius:8px;font-family:var(--aptos);font-size:15px;font-weight:700;border:none;cursor:pointer;background:var(--accent);color:#fff;margin-top:1.5rem;transition:opacity .15s;}
+.btn-go:hover{opacity:.88;}
+.alert-box{border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1.2rem;font-size:14px;line-height:1.65;border:2px solid transparent;}
+.alert-err{background:var(--ko-bg);color:var(--ko);border-color:var(--ko);}
+.alert-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn);}
+.quiz-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:.7rem;}
+.quiz-meta{font-size:12px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;}
+.quiz-pts{font-size:12px;font-weight:700;color:var(--ok);}
+.timer-row{display:flex;align-items:center;gap:12px;margin-bottom:1.4rem;}
+.t-outer{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.t-inner{height:100%;background:var(--accent);border-radius:3px;transition:width 1s linear,background .3s;}
+.t-inner.urgent{background:var(--ko);}
+.t-num{font-size:14px;font-weight:700;min-width:26px;text-align:right;color:var(--mid);}
+.t-num.urgent{color:var(--ko);}
+.q-text{font-size:1.12rem;font-weight:400;line-height:1.65;margin-bottom:1.4rem;color:var(--navy);}
+.opts{display:flex;flex-direction:column;gap:10px;margin-bottom:1.2rem;}
+.opt{padding:.88rem 1.1rem;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-size:15px;line-height:1.5;text-align:left;background:var(--bg);color:var(--ink);font-family:var(--aptos);transition:all .15s;}
+.opt:hover:not(:disabled){background:var(--bg2);border-color:var(--accent2);}
+.opt.correct{background:var(--ok-bg)!important;border-color:var(--ok)!important;color:var(--ok)!important;font-weight:700;}
+.opt.wrong{background:var(--ko-bg)!important;border-color:var(--ko)!important;color:var(--ko)!important;font-weight:700;}
+.opt.reveal{background:var(--ok-bg)!important;border-color:var(--ok)!important;color:var(--ok)!important;font-weight:700;}
+.fb{padding:.85rem 1.1rem;border-radius:8px;font-size:14px;line-height:1.65;margin-bottom:1rem;display:none;border:1.5px solid transparent;}
+.fb.show{display:block;}
+.fb.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok);}
+.fb.ko{background:var(--ko-bg);color:var(--ko);border-color:var(--ko);}
+.fb.to{background:var(--warn-bg);color:var(--warn);border-color:var(--warn);}
+.btn-qnext{font-family:var(--aptos);font-size:13px;font-weight:700;padding:9px 22px;border-radius:8px;border:none;cursor:pointer;background:var(--accent);color:#fff;display:none;}
+.btn-qnext.show{display:inline-block;}
+.result-center{max-width:600px;margin:0 auto;text-align:center;padding:2rem 1rem;}
+.r-score{font-size:5rem;font-weight:700;line-height:1;color:var(--accent);margin-bottom:.2rem;}
+.r-of{font-size:14px;color:var(--muted);margin-bottom:1.2rem;}
+.r-grade{font-size:1.1rem;font-weight:700;margin-bottom:.8rem;color:var(--navy);}
+.r-msg{font-size:14px;font-style:italic;color:var(--mid);line-height:1.8;margin-bottom:2rem;}
+.r-bk{background:var(--bg2);border:1px solid var(--rule);border-radius:10px;padding:1rem 1.2rem;margin-bottom:2rem;text-align:left;}
+.r-bk h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem;font-weight:700;}
+.rb-row{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;border-bottom:1px solid var(--rule);}
+.rb-row:last-child{border:none;}
+.gc{color:var(--ok);font-weight:700;}.rc{color:var(--ko);font-weight:700;}
+.rev-section{text-align:left;margin-top:2rem;}
+.rev-section h3{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;font-weight:700;}
+.rev-item{border:1px solid var(--rule);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.8rem;background:var(--bg);}
+.rev-item.ok-i{border-color:rgba(30,122,64,.3);background:rgba(30,122,64,.03);}
+.rev-item.ko-i{border-color:rgba(185,28,28,.3);background:rgba(185,28,28,.03);}
+.rev-item.to-i{border-color:rgba(146,96,10,.25);background:rgba(146,96,10,.02);}
+.rev-q{font-size:14px;font-weight:700;margin-bottom:.55rem;line-height:1.5;color:var(--navy);}
+.rev-badge{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:99px;font-weight:700;margin-bottom:.5rem;}
+.b-ok{background:var(--ok-bg);color:var(--ok);border:1px solid rgba(30,122,64,.3);}
+.b-ko{background:var(--ko-bg);color:var(--ko);border:1px solid rgba(185,28,28,.3);}
+.b-to{background:var(--warn-bg);color:var(--warn);border:1px solid rgba(146,96,10,.25);}
+.rev-ans{font-size:13px;color:var(--mid);margin-bottom:.35rem;}
+.rev-exp{font-size:13px;color:var(--mid);line-height:1.65;font-style:italic;margin-top:.4rem;padding-top:.4rem;border-top:1px solid var(--rule);}
+.btn-pdf{font-family:var(--aptos);font-size:14px;font-weight:700;padding:11px 26px;border-radius:8px;border:none;cursor:pointer;background:var(--accent);color:#fff;margin-right:10px;margin-bottom:10px;transition:opacity .15s;}
+.btn-pdf:hover{opacity:.88;}
+.btn-plain{font-family:var(--aptos);font-size:14px;padding:11px 20px;border-radius:8px;border:2px solid var(--border);cursor:pointer;background:transparent;color:var(--ink);margin-bottom:10px;}
+.btn-plain:hover{background:var(--bg2);}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+</style>
+
+<div id="app">
+<h2 class="sr-only">Lezione su Italo Svevo con verifica finale</h2>
+<div class="hero">
+  <div class="hero-eyebrow">Letteratura Italiana del Novecento</div>
+  <h1>Italo Svevo</h1>
+  <div class="hero-dates">Trieste, 19 dicembre 1861 — Motta di Livenza, 13 settembre 1928</div>
+  <div class="hero-tags">
+    <span class="tag">Romanzo psicologico</span><span class="tag">Inettitudine</span>
+    <span class="tag">La coscienza di Zeno</span><span class="tag">Freud</span>
+    <span class="tag">Trieste asburgica</span><span class="tag">Modernismo europeo</span>
+  </div>
+</div>
+<div id="topnav">
+  <button class="nav-tab" id="tab-vita"      onclick="goTo('vita')">Vita</button>
+  <button class="nav-tab" id="tab-poetica"   onclick="goTo('poetica')">Poetica</button>
+  <button class="nav-tab" id="tab-opere"     onclick="goTo('opere')">Opere</button>
+  <button class="nav-tab" id="tab-testi"     onclick="goTo('testi')">Testi</button>
+  <button class="nav-tab" id="tab-curiosita" onclick="goTo('curiosita')">Curiosità</button>
+  <button class="nav-tab" id="tab-video"     onclick="goTo('video')">Video RAI</button>
+  <button class="nav-tab" id="tab-form"      onclick="goTo('form')">Verifica &#8594;</button>
+</div>
+
+<!-- VITA -->
+<div id="sec-vita" class="section">
+<div class="sec-title">Vita</div>
+<div class="sec-sub">«Sono un commerciante che scrive di domenica» — un'esistenza doppia tra affari e letteratura</div>
+<div class="prose">Italo Svevo nasce il 19 dicembre 1861 a Trieste, con il vero nome di <strong>Ettore Aron Schmitz</strong>. Il cognome letterario che sceglie è già un manifesto: «Svevo» rimanda alla Svevia tedesca, «Italo» rivendica l'appartenenza alla cultura italiana. Trieste nel 1861 è una città dell'Impero austro-ungarico, porto commerciale cosmopolita, dove si mescolano italiani, tedeschi, ebrei, slavi: il luogo ideale per crescere con la sensazione di non appartenere a nessuna cultura in modo pieno.</div>
+<div class="prose">La famiglia Schmitz è borghese ed ebraica. Il padre Francesco gestisce un commercio di vetrerie e muore quando Ettore è ancora giovane, lasciando la famiglia in difficoltà finanziarie. Questo passaggio — dal sogno alla necessità — sarà il nucleo tematico di tutta la sua narrativa.</div>
+<div class="tl-item"><div class="tl-year">1861</div><div class="tl-body"><b>Nasce a Trieste come Ettore Schmitz</b><p>In una famiglia borghese ebraica. Trieste è città dell'Impero austro-ungarico: questo status irrisolto segnerà tutta la sua visione del mondo.</p></div></div>
+<div class="tl-item"><div class="tl-year">1874–78</div><div class="tl-body"><b>Studi in Germania, a Segnitz sul Meno</b><p>Apprende il tedesco, legge Schopenhauer e i classici germanici.</p></div></div>
+<div class="tl-item"><div class="tl-year">1880</div><div class="tl-body"><b>Impiegato alla Banca Union di Trieste</b><p>Lavora per 19 anni come impiegato bancario, scrivendo di nascosto nei ritagli di tempo.</p></div></div>
+<div class="tl-item"><div class="tl-year">1892</div><div class="tl-body"><b>Una vita — il primo romanzo</b><p>Pubblicato a proprie spese. Quasi nessuno lo legge. La critica italiana lo ignora.</p></div></div>
+<div class="tl-item"><div class="tl-year">1898</div><div class="tl-body"><b>Senilità e il silenzio della critica</b><p>Anche il secondo romanzo viene ignorato. Svevo decide di smettere di scrivere narrativa per quasi 25 anni.</p></div></div>
+<div class="tl-item"><div class="tl-year">1896</div><div class="tl-body"><b>Sposa Livia Veneziani</b><p>Si converte al cattolicesimo ed entra nell'azienda di vernici di famiglia.</p></div></div>
+<div class="tl-item"><div class="tl-year">1907</div><div class="tl-body"><b>Incontra James Joyce a Trieste</b><p>Joyce insegna inglese alla Berlitz School. Nasce un'amicizia intellettuale fondamentale.</p></div></div>
+<div class="tl-item"><div class="tl-year">1923</div><div class="tl-body"><b>La coscienza di Zeno</b><p>Joyce lo manda ai critici parigini Larbaud e Crémieux. Consacrazione internazionale.</p></div></div>
+<div class="tl-item"><div class="tl-year">1925</div><div class="tl-body"><b>Eugenio Montale lo «scopre» in Italia</b><p>Primo saggio critico italiano entusiasto. Tardiva consacrazione in patria.</p></div></div>
+<div class="tl-item"><div class="tl-year">1928</div><div class="tl-body"><b>Morte improvvisa a Motta di Livenza</b><p>Muore in seguito a un incidente automobilistico. Lascia incompiuto «Il vecchione».</p></div></div>
+<div class="sec-footer"><button class="btn-avanti" onclick="goTo('poetica')">Poetica &#8594;</button></div>
+</div>
+
+<!-- POETICA -->
+<div id="sec-poetica" class="section">
+<div class="sec-title">La Poetica</div>
+<div class="sec-sub">L'inetto, la malattia della volontà e il monologo interiore</div>
+<div class="prose">A fine Ottocento, la grande certezza positivista sta crollando. Darwin ha dimostrato che l'uomo è il prodotto casuale di una selezione naturale cieca; Freud sta rivelando che la parte conscia della mente è solo la punta di un iceberg; Schopenhauer ha già detto che la volontà è irrazionale. Svevo è il romanziere italiano che traduce tutto questo in narrativa.</div>
+<div class="card"><div class="card-label">Il personaggio dell'inetto</div><div class="prose" style="margin:0;">Al centro di tutti e tre i romanzi c'è la figura dell'<strong>inetto</strong> — un uomo incapace di agire, di scegliere, di affermarsi nel mondo. Alfonso Nitti, Emilio Brentani, Zeno Cosini: uomini di buona cultura, non stupidi — anzi, la loro lucidità li condanna. L'inetto sveviano non è un fallito per stupidità: è un fallito per eccesso di coscienza.</div></div>
+<div class="card"><div class="card-label">Freud e la psicanalisi come strumento narrativo</div><div class="prose" style="margin:0;">Svevo non fu mai psicanalizzato (era scettico sulla psicanalisi come terapia). Ma usò i concetti freudiani — l'inconscio, la rimozione, i meccanismi di difesa dell'Io — come strumenti narrativi. In «La coscienza di Zeno» il romanzo si presenta come manoscritto scritto su richiesta del dottor S.</div></div>
+<div class="card"><div class="card-label">Il monologo interiore e il tempo soggettivo</div><div class="prose" style="margin:0;">Svevo è uno dei pionieri europei del <strong>monologo interiore</strong>. Come Joyce e Proust, capisce che il tempo della coscienza non è il tempo dell'orologio. «La coscienza di Zeno» è costruita per capitoli tematici non cronologici: la memoria seleziona, rielabora, falsifica.</div></div>
+<div class="card"><div class="card-label">La lingua sveviana: italiano «impuro»</div><div class="prose" style="margin:0;">Svevo scrisse in un italiano «impuro» — influenzato dal dialetto triestino e dalla sintassi tedesca. I puristi lo criticarono. Ma quella lingua «strana» è parte del significato: è la lingua di un uomo senza una patria linguistica sicura. Montale capì che era una ricchezza.</div></div>
+<div class="card"><div class="card-label">Le grandi influenze filosofiche</div><div class="prose" style="margin:0;"><strong>Darwin</strong> — gli inetti sono i perdenti della selezione naturale. <strong>Schopenhauer</strong> — la volontà è cieca e irrazionale. <strong>Nietzsche</strong> — il superuomo come termine di confronto negativo. <strong>Freud</strong> — la cassetta degli strumenti per sezionare l'inconscio. <strong>Marx</strong> — la critica implicita all'alienazione borghese.</div></div>
+<div class="sec-footer"><button class="btn-avanti" onclick="goTo('opere')">Opere &#8594;</button></div>
+</div>
+
+<!-- OPERE -->
+<div id="sec-opere" class="section">
+<div class="sec-title">Le Opere</div>
+<div class="sec-sub">Tre romanzi — e una vita doppia tra commercio e letteratura</div>
+<div class="opera-box"><div class="opera-head"><h3>Una vita</h3><span>1892</span></div><div class="opera-body"><p>Il primo romanzo, pubblicato a proprie spese. Il titolo originale era <strong>«Un inetto»</strong>. Il protagonista è <strong>Alfonso Nitti</strong>, giovane di provincia venuto a Trieste per fare carriera in banca. Si innamora della figlia del suo principale, Annetta Maller. Ma quando lei vuole formalizzare il rapporto, Alfonso fugge e infine si suicida gettandosi in mare — l'unico atto davvero decisivo della sua esistenza.</p></div></div>
+<div class="opera-box"><div class="opera-head"><h3>Senilità</h3><span>1898</span></div><div class="opera-body"><p>Il protagonista è <strong>Emilio Brentani</strong>, 35 anni, che si sente già «vecchio» nell'anima. Si innamora di <strong>Angiolina</strong>, una giovane che non lo ama. Sa benissimo che lei lo tradisce, ma preferisce idealizzarla — una vera operazione di rimozione freudiana ante litteram. La sorella Amalia muore di delirio da etere.</p></div></div>
+<div class="opera-box"><div class="opera-head"><h3>La coscienza di Zeno</h3><span>1923</span></div><div class="opera-body"><p>Il capolavoro. Il <strong>dottor S.</strong> pubblica il manoscritto autobiografico del paziente Zeno Cosini come «vendetta» per l'interruzione della terapia. Struttura per capitoli tematici: il <strong>fumo</strong>, la <strong>morte del padre</strong>, il <strong>matrimonio</strong> (Zeno sposa Augusta — che si rivela la moglie perfetta), l'<strong>amante Carla</strong>, il <strong>socio Guido Speier</strong> che si suicida per davvero, il <strong>finale apocalittico</strong> con la profezia della distruzione della civiltà.</p></div></div>
+<div class="opera-box"><div class="opera-head"><h3>Il vecchione e le opere minori</h3><span>1927–1928</span></div><div class="opera-body"><p>Il quarto romanzo «Il vecchione» rimase incompiuto per l'incidente del 1928. Tra le opere minori: «La novella del buon vecchio e della bella fanciulla», «Una burla riuscita», «Corto viaggio sentimentale».</p></div></div>
+<div class="sec-footer"><button class="btn-avanti" onclick="goTo('testi')">Testi &#8594;</button></div>
+</div>
+
+<!-- TESTI -->
+<div id="sec-testi" class="section">
+<div class="sec-title">Testi e Analisi</div>
+<div class="sec-sub">I passi fondamentali — con note di commento</div>
+<div class="quote-wrap"><div class="quote-ref">La coscienza di Zeno — Il fumo (incipit)</div><div class="quote-text">«Mio padre fu sempre un fumatore. [...] La prima sigaretta! Le conseguenze di essa si ramificano fino ad oggi a traverso tutti i miei anni.»</div><div class="quote-note">Il capitolo sul fumo è un trattato sull'autoingano. Zeno ha sempre «l'ultima sigaretta». Ogni data su cui scrive «ultima» diventa l'inizio di una nuova serie. La sigaretta è la metafora della volontà impotente.</div></div>
+<div class="quote-wrap"><div class="quote-ref">La coscienza di Zeno — La morte del padre</div><div class="quote-text">«Io so — ma non è un ricordo genuino, è una supposizione — che, spaventato, mi scostai dal letto, e che per ciò la sua mano, invece di posarsi sulla mia testa o di colpirmi, cadde sul mio guanciale. Vi rimase e vi si aggrinzì. Era morto.»</div><div class="quote-note">La frase «non è un ricordo genuino, è una supposizione» è la firma di Svevo: il narratore inattendibile che si autosmonta. La memoria non registra: costruisce, seleziona, falsifica.</div></div>
+<div class="quote-wrap"><div class="quote-ref">La coscienza di Zeno — Il matrimonio con Augusta</div><div class="quote-text">«Avevo sposato Augusta perché non ero riuscito a sposare Ada. [...] E invece, con la persona che neppure avevo desiderata, ebbi tutta quella felicità che si concede all'uomo su questa terra.»</div><div class="quote-note">Il paradosso del matrimonio «sbagliato» che risulta perfetto. Svevo suggerisce che l'inconscio è più saggio della ragione.</div></div>
+<div class="quote-wrap"><div class="quote-ref">La coscienza di Zeno — Il finale apocalittico</div><div class="quote-text">«Forse traverso una catastrofe enorme prodotta dagli ordigni ritorneremo alla salute. [...] Un uomo fatto come tutti gli altri, nel segreto di una stanza di questo mondo, inventerà un esplosivo incomparabile [...] e la terra ritornata alla forma di nebulosa errerà nei cieli priva di parassiti e di malattie.»</div><div class="quote-note">Scritto nel 1923, anticipa l'angoscia nucleare. Zeno proietta la propria «malattia» sull'intera civiltà tecnologica.</div></div>
+<div class="quote-wrap"><div class="quote-ref">Senilità — La senilità come stato dell'anima (cap. I)</div><div class="quote-text">«Subito, con le prime parole che le rivolse, volle avvisarla che non intendeva compromettersi in una relazione troppo seria. Le parlò cioè da uomo pratico che però era del tutto diverso dall'uomo pratico ch'egli era veramente.»</div><div class="quote-note">Emilio vuole essere un «uomo pratico» ma sa di non esserlo. Si comporta come se lo fosse, mente ad Angiolina e a se stesso, e naturalmente si innamora.</div></div>
+<div class="sec-footer"><button class="btn-avanti" onclick="goTo('curiosita')">Curiosità &#8594;</button></div>
+</div>
+
+<!-- CURIOSITÀ -->
+<div id="sec-curiosita" class="section">
+<div class="sec-title">Curiosità e Aneddoti</div>
+<div class="sec-sub">Il lato sorprendente di Ettore Schmitz, detto Italo Svevo</div>
+<div class="cur-card"><div class="cur-icon">1</div><div class="cur-body"><strong>Il doppio nome come manifesto</strong><p>«Italo Svevo» non è solo uno pseudonimo: è un programma. «Italo» rivendica la cultura italiana, «Svevo» richiama la Svevia tedesca. Una dichiarazione di ibridità identitaria ante litteram.</p></div></div>
+<div class="cur-card"><div class="cur-icon">2</div><div class="cur-body"><strong>L'amicizia con James Joyce</strong><p>Nel 1907 Joyce arrivò a Trieste come insegnante di inglese. Svevo prese lezioni da lui. Nacque un'amicizia straordinaria: si scambiavano i manoscritti. Senza Joyce, «La coscienza di Zeno» non avrebbe mai raggiunto Parigi.</p></div></div>
+<div class="cur-card"><div class="cur-icon">3</div><div class="cur-body"><strong>«Scrivo di domenica»</strong><p>Per quasi tutta la vita adulta Svevo fu un dirigente dell'azienda di vernici Veneziani. Lavorava sei giorni su sette. Quando i giornalisti parigini lo scoprirono, rispose: «Ho scritto sempre di domenica».</p></div></div>
+<div class="cur-card"><div class="cur-icon">4</div><div class="cur-body"><strong>Il vero dottor S.</strong><p>Il «dottor S.» del romanzo è ispirato da Edoardo Weiss, medico triestino e uno dei primi psicanalisti italiani, discepolo diretto di Freud. Svevo non si psicanalizzò mai.</p></div></div>
+<div class="cur-card"><div class="cur-icon">5</div><div class="cur-body"><strong>La sigaretta come autobiografia</strong><p>Il capitolo sul fumo è largamente autobiografico. Svevo fumò per tutta la vita. Sul letto di morte, dopo l'incidente, chiese una sigaretta. Quando gliela negarono: «Questa sarebbe stata davvero l'ultima».</p></div></div>
+<div class="cur-card"><div class="cur-icon">6</div><div class="cur-body"><strong>Eugenio Montale e la «scoperta» italiana</strong><p>In Italia Svevo fu ignorato fino al 1925, quando Montale pubblicò un saggio entusiasta. Montale scrisse che in Svevo «c'è tutta la nostra vita interiore, tutta la nostra malattia».</p></div></div>
+<div class="cur-card"><div class="cur-icon">7</div><div class="cur-body"><strong>La profezia nucleare del 1923</strong><p>Il finale de «La coscienza di Zeno» fu scritto nel 1923, ventidue anni prima di Hiroshima. Svevo descriveva la logica interna della civiltà moderna: la «malattia» dell'individuo si proietta sulla tecnologia.</p></div></div>
+<div class="cur-card"><div class="cur-icon">8</div><div class="cur-body"><strong>Trieste, laboratorio letterario</strong><p>Trieste agli inizi del Novecento era unica: porto principale dell'Impero austro-ungarico, italofona ma tedescofona nell'amministrazione. Nello stesso periodo Umberto Saba scriveva il suo «Canzoniere».</p></div></div>
+<div class="cur-card"><div class="cur-icon">9</div><div class="cur-body"><strong>Il violino e gli anni del silenzio</strong><p>Svevo suonava il violino per diletto, come Zeno nel romanzo. Negli anni in cui non scriveva narrativa continuò a suonare: modo di mantenere vivo il lato non borghese di sé senza rischiare la sconfitta pubblica.</p></div></div>
+<div class="cur-card"><div class="cur-icon">10</div><div class="cur-body"><strong>La doppia identità ebraico-cattolica</strong><p>Svevo si convertì al cattolicesimo nel 1896 per sposare Livia Veneziani. Ma non abbandonò mai la propria identità ebraica interiore. I suoi personaggi restano sempre «convertiti» che si sentono osservatori dall'esterno.</p></div></div>
+<div class="cur-card"><div class="cur-icon">11</div><div class="cur-body"><strong>Il rifiuto della psicanalisi come cura</strong><p>Nonostante abbia costruito su Freud il suo capolavoro, Svevo era scettico sulla psicanalisi come terapia: «come cura mi sembra una spirale senza fine — si psicanalizza il paziente, poi lo psicanalista...».</p></div></div>
+<div class="cur-card"><div class="cur-icon">12</div><div class="cur-body"><strong>L'incidente che cambiò tutto</strong><p>Il 13 settembre 1928, mentre tornava a Trieste in automobile, Svevo fu gravemente ferito. Prima di perdere conoscenza, chiese ai presenti di leggere i frammenti del quarto romanzo. Morì poco dopo.</p></div></div>
+<div class="sec-footer"><button class="btn-avanti" onclick="goTo('video')">Video RAI &#8594;</button></div>
+</div>
+
+<!-- VIDEO -->
+<div id="sec-video" class="section">
+<div class="sec-title">Video RAI — BIG Nomi</div>
+<div class="sec-sub">Documentario di RaiPlay su Italo Svevo</div>
+<div class="video-wrapper"><video controls preload="metadata"><source src="https://github.com/giuseppecontaldo/italosvevo/blob/main/svevo-pezzali.mp4" type="video/mp4">Il tuo browser non supporta la riproduzione video.</video></div>
+<div class="video-caption">BIG Nomi — Italo Svevo, RaiPlay. Disponibile per uso didattico.</div>
+<div class="prose" style="margin-top:1.5rem;">Questo documentario della serie RAI <em>BIG Nomi</em> ripercorre la vita e l'opera di Italo Svevo. Puoi usarlo come introduzione alla lezione o come ripasso prima della verifica.</div>
+<div class="card" style="margin-top:1rem;"><div class="card-label">Spunti di riflessione dopo la visione</div><div class="prose" style="margin:0;font-size:15px;">In che modo il documentario arricchisce la tua comprensione di Svevo? Quali aspetti della sua vita ti hanno colpito di più? Riesci a trovare un collegamento tra la Trieste descritta nel video e il senso di identità ibrida dei personaggi?</div></div>
+<div class="sec-footer"><button class="btn-avanti" onclick="goTo('form')">Vai alla Verifica &#8594;</button></div>
+</div>
+
+<!-- FORM -->
+<div id="sec-form" class="section">
+<div class="form-wrap">
+  <h2>Verifica — Italo Svevo</h2>
+  <p>Compila il modulo prima di iniziare. La verifica può essere effettuata <strong>una sola volta per indirizzo email</strong>. Al termine potrai scaricare il certificato PDF con tutte le domande e le risposte. L'email deve terminare con <strong>.edu.it</strong></p>
+  <div id="formAlert"></div>
+  <div class="form-grid">
+    <div class="form-group"><label for="f-nome">Nome *</label><input type="text" id="f-nome" placeholder="es. Giulia" autocomplete="given-name"><span class="form-err" id="err-nome">Campo obbligatorio</span></div>
+    <div class="form-group"><label for="f-cognome">Cognome *</label><input type="text" id="f-cognome" placeholder="es. Bianchi" autocomplete="family-name"><span class="form-err" id="err-cognome">Campo obbligatorio</span></div>
+    <div class="form-group"><label for="f-classe">Classe *</label><input type="text" id="f-classe" placeholder="es. 5"><span class="form-err" id="err-classe">Campo obbligatorio</span></div>
+    <div class="form-group"><label for="f-sezione">Sezione *</label><input type="text" id="f-sezione" placeholder="es. B"><span class="form-err" id="err-sezione">Campo obbligatorio</span></div>
+    <div class="form-group full"><label for="f-email">Email istituzionale *</label><input type="email" id="f-email" placeholder="nome.cognome@istituto.edu.it" autocomplete="email"><span class="form-err" id="err-email">Email non valida — deve terminare con .edu.it</span><span class="form-info">Deve terminare con .edu.it — ogni email può essere usata una sola volta</span></div>
+  </div>
+  <button class="btn-go" id="btnGo" onclick="validateForm()">Inizia la Verifica — 20 domande, 30 secondi ciascuna</button>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div id="sec-quiz" class="section">
+  <div class="quiz-hdr"><div class="quiz-meta" id="qMeta">Domanda 1 di 20</div><div class="quiz-pts" id="qPts">Punteggio: 0</div></div>
+  <div class="timer-row"><div class="t-outer"><div class="t-inner" id="tBar" style="width:100%"></div></div><div class="t-num" id="tNum">30</div></div>
+  <div class="q-text" id="qText"></div>
+  <div class="opts" id="qOpts"></div>
+  <div class="fb" id="fbBox"></div>
+  <button class="btn-qnext" id="btnQNext" onclick="nextQ()">Avanti &#8594;</button>
+</div>
+
+<!-- RISULTATO -->
+<div id="sec-result" class="section">
+<div class="result-center">
+  <div class="r-score" id="rScore"></div>
+  <div class="r-of">su 20 domande</div>
+  <div class="r-grade" id="rGrade"></div>
+  <div class="r-msg" id="rMsg"></div>
+  <div class="r-bk"><h4>Riepilogo</h4>
+    <div class="rb-row"><span>Risposte corrette</span><span class="gc" id="rb-ok"></span></div>
+    <div class="rb-row"><span>Risposte errate</span><span class="rc" id="rb-ko"></span></div>
+    <div class="rb-row"><span>Tempo scaduto</span><span class="rc" id="rb-to"></span></div>
+    <div class="rb-row"><span>Percentuale</span><span id="rb-pct"></span></div>
+  </div>
+  <div class="rev-section"><h3>Revisione completa di tutte le domande</h3><div id="revItems"></div></div>
+  <div style="margin-top:1.5rem;">
+    <button class="btn-pdf" onclick="dlPDF()">Scarica certificato PDF completo</button><br>
+    <button class="btn-plain" style="margin-top:8px;" onclick="goTo('vita')">Torna alla lezione</button>
+  </div>
+</div>
+</div>
+
+</div><!-- #app -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── Nav ──────────────────────────────────────────────────────
+function goTo(name) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('visible'); });
+  var el = document.getElementById('sec-' + name);
+  if (el) el.classList.add('visible');
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  var tab = document.getElementById('tab-' + name);
+  if (tab) tab.classList.add('active');
+  window.scrollTo(0, 0);
+}
+goTo('vita');
+
+// ── Storage con fallback in-memory ───────────────────────────
+var memStore = {};
+
+function storageGet(key) {
+  return new Promise(function(resolve) {
+    if (window.storage && typeof window.storage.get === 'function') {
+      window.storage.get(key, true)
+        .then(function(res) { resolve(res && res.value ? res.value : null); })
+        .catch(function() { resolve(memStore[key] || null); });
+    } else {
+      resolve(memStore[key] || null);
+    }
+  });
+}
+
+function storageSet(key, val) {
+  memStore[key] = val;
+  if (window.storage && typeof window.storage.set === 'function') {
+    window.storage.set(key, val, true).catch(function(){});
+  }
+}
+
+function emailKey(email) {
+  return 'svevo_done_' + email.toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+}
+
+// ── Stato quiz ────────────────────────────────────────────────
+var student = {}, selQ = [], curIdx = 0;
+var score = 0, okC = 0, koC = 0, toC = 0;
+var tInterval = null, tLeft = 30, answered = false, answers = [];
+
+// ── Domande ───────────────────────────────────────────────────
+var ALL_Q = [
+  {q:"Qual era il vero nome di Italo Svevo?",opts:["Ettore Aron Schmitz","Emilio Brentani Svevo","Alfonso Nitti","Ettore Veneziani"],c:0,exp:"Italo Svevo era lo pseudonimo di Ettore Aron Schmitz, nato a Trieste nel 1861."},
+  {q:"In quale città nacque Italo Svevo?",opts:["Venezia","Milano","Roma","Trieste"],c:3,exp:"Svevo nacque a Trieste il 19 dicembre 1861, allora città dell'Impero austro-ungarico."},
+  {q:"A quale banca lavorò Svevo per quasi vent'anni?",opts:["Banco di Napoli","Banca Union di Trieste","Cassa di Risparmio","Banca Commerciale Italiana"],c:1,exp:"Dal 1880 al 1899 circa, Svevo lavorò come impiegato alla Banca Union di Trieste."},
+  {q:"In quale anno Svevo incontrò James Joyce a Trieste?",opts:["1900","1903","1907","1912"],c:2,exp:"Nel 1907 Joyce era a Trieste come insegnante di inglese alla Berlitz School."},
+  {q:"Come si chiama il protagonista di 'Una vita' (1892)?",opts:["Emilio Brentani","Zeno Cosini","Alfonso Nitti","Guido Speier"],c:2,exp:"Alfonso Nitti è il protagonista del primo romanzo: un giovane intellettuale incapace di affermarsi nel mondo borghese."},
+  {q:"Come si chiama il protagonista di 'Senilità' (1898)?",opts:["Alfonso Nitti","Zeno Cosini","Emilio Brentani","Ettore Maller"],c:2,exp:"Emilio Brentani è il protagonista di 'Senilità': un trentacinquenne che si sente già 'vecchio' nell'anima."},
+  {q:"Qual era il titolo originale di 'Una vita', poi cambiato dall'editore?",opts:["Un fallito","Un inetto","Un borghese","Un sognatore"],c:1,exp:"Il titolo originale era 'Un inetto', molto più esplicito sul tema centrale."},
+  {q:"In quale anno fu pubblicata 'La coscienza di Zeno'?",opts:["1919","1921","1923","1925"],c:2,exp:"'La coscienza di Zeno' fu pubblicata nel 1923, venticinque anni dopo 'Senilità'."},
+  {q:"Quale critico italiano 'scoprì' Svevo in Italia nel 1925?",opts:["Benedetto Croce","Giuseppe Ungaretti","Eugenio Montale","Luigi Pirandello"],c:2,exp:"Eugenio Montale pubblicò nel 1925 il primo saggio critico italiano entusiasta su Svevo."},
+  {q:"Cosa significa 'inetto' nella narrativa sveviana?",opts:["Un personaggio stupido","Un personaggio corrotto","Un personaggio incapace di agire per eccesso di coscienza","Un personaggio fisicamente debole"],c:2,exp:"L'inetto sveviano è colui che, pur essendo intelligente e sensibile, non riesce ad agire efficacemente nel mondo."},
+  {q:"Qual è la cornice narrativa de 'La coscienza di Zeno'?",opts:["Zeno scrive un diario intimo","Il dottor S. pubblica il manoscritto di Zeno come 'vendetta'","Un narratore onnisciente racconta la vita di Zeno","Zeno racconta la storia a un amico"],c:1,exp:"Il dottor S. pubblica il manoscritto autobiografico di Zeno dopo che questi ha interrotto la terapia."},
+  {q:"Come si chiama l'amante di Zeno nel romanzo?",opts:["Ada Malfenti","Augusta Malfenti","Angiolina","Carla"],c:3,exp:"Carla è la giovane amante di Zeno, con cui instaura una relazione extraconiugale."},
+  {q:"Chi è Augusta nel romanzo?",opts:["La sorella di Zeno","La rivale di Ada","La moglie che Zeno sposa 'per ripiego', rivelatasi la compagna ideale","L'analista di Zeno"],c:2,exp:"Augusta è la sorella delle Malfenti che Zeno finisce per sposare. Si rivela la moglie perfetta."},
+  {q:"Quale filosofo influenzò Svevo con il pessimismo cosmico?",opts:["Hegel","Kant","Nietzsche","Schopenhauer"],c:3,exp:"Arthur Schopenhauer, con la filosofia della volontà cieca e irrazionale, influenzò profondamente Svevo."},
+  {q:"Come si chiama la sorella di Emilio Brentani in 'Senilità'?",opts:["Angiolina","Ada","Amalia","Anna"],c:2,exp:"Amalia è la sorella nevrotica di Emilio, innamorata in segreto di Stefano Balli. Muore di delirio da etere."},
+  {q:"Qual è il titolo del quarto romanzo di Svevo, incompiuto?",opts:["Il vecchione / Il vegliardo","La malattia","Il ritorno di Zeno","L'ultimo inetto"],c:0,exp:"Svevo stava lavorando a 'Il vecchione' (o 'Il vegliardo'). L'incidente del 1928 glielo impedì."},
+  {q:"Come morì Italo Svevo?",opts:["Di infarto a Trieste","In seguito a un incidente automobilistico a Motta di Livenza","Di polmonite a Parigi","Per cause naturali a Vienna"],c:1,exp:"Svevo morì il 13 settembre 1928 a Motta di Livenza in seguito alle ferite di un incidente automobilistico."},
+  {q:"Cosa significa il cognome pseudonimico 'Svevo'?",opts:["Allude alla Svevia, regione tedesca — doppia identità italo-germanica","È il cognome della madre","Significa 'libero' in dialetto triestino","È un omaggio a un poeta medievale"],c:0,exp:"'Svevo' richiama la Svevia, regione tedesca: insieme a 'Italo', dichiara la doppia identità culturale."},
+  {q:"Cosa profetizza Zeno nel finale del romanzo?",opts:["Il ritorno alla natura","La guarigione universale attraverso la psicanalisi","La distruzione della terra da parte di un uomo 'più malato'","La fine del capitalismo"],c:2,exp:"Il finale profetizza che un uomo 'più malato degli altri' distruggerà la terra con un esplosivo cosmico — scritto nel 1923."},
+  {q:"Quale azienda gestì Svevo dopo il matrimonio?",opts:["Una banca viennese","Una casa editrice triestina","La Società Veneziani, produttrice di vernici antisdrucciolo per navi","Un'azienda importatrice di tessuti"],c:2,exp:"Svevo entrò nell'azienda della moglie: la Società Veneziani, produttrice di vernici antisdrucciolo per navi."},
+  {q:"Quale strumento musicale suonava Svevo, come Zeno nel romanzo?",opts:["Il pianoforte","Il violino","La chitarra","Il flauto"],c:1,exp:"Svevo suonava il violino per diletto, esattamente come il suo personaggio Zeno Cosini."},
+  {q:"Quale tecnica narrativa innovativa usa Svevo per la prima volta in Italia?",opts:["Il narratore onnisciente","Il monologo interiore e la narrazione inattendibile","Il narratore collettivo","Il racconto cornice"],c:1,exp:"Svevo è tra i pionieri del monologo interiore e del narratore inattendibile: Zeno mente a se stesso e al lettore."},
+  {q:"A quale romanziere europeo fu paragonato Svevo dalla critica francese?",opts:["Dostoevskij e Tolstoj","Marcel Proust e James Joyce","Thomas Mann e Kafka","Flaubert e Zola"],c:1,exp:"I critici parigini Larbaud e Crémieux paragonarono Svevo a Marcel Proust e James Joyce."},
+  {q:"Perché Svevo smise di scrivere narrativa per 25 anni?",opts:["Per mancanza di idee","Per il successo degli affari","Per il silenzio critico intorno ai primi due romanzi","Per ordine della moglie"],c:2,exp:"Il silenzio della critica italiana intorno a 'Senilità' (1898) ferì profondamente Svevo."},
+  {q:"Chi sono i critici francesi che scoprirono Svevo grazie a Joyce?",opts:["André Gide e Paul Valéry","Valéry Larbaud e Benjamin Crémieux","Marcel Proust e André Malraux","Sartre e Camus"],c:1,exp:"Valéry Larbaud e Benjamin Crémieux furono i critici parigini a cui Joyce mandò 'La coscienza di Zeno'."},
+  {q:"Qual è il significato del titolo 'Senilità'?",opts:["L'anzianità del protagonista","Uno stato dell'anima: la cristallizzazione prematura dell'esistenza","La malattia senile che colpisce Amalia","Un riferimento alla Roma classica"],c:1,exp:"'Senilità' non indica l'età (Emilio ha 35 anni) ma uno stato dell'anima: l'incapacità di vivere pienamente nel presente."},
+  {q:"Come si chiama il personaggio di cui Emilio si innamora in 'Senilità'?",opts:["Augusta","Ada","Amalia","Angiolina"],c:3,exp:"Angiolina è la giovane di cui Emilio si innamora. Lui la idealizza nonostante sappia che lo tradisce."},
+  {q:"Quale filosofo influenzò Svevo con la teoria della selezione naturale?",opts:["Kant","Darwin","Marx","Hegel"],c:1,exp:"Darwin influenzò Svevo: gli 'inetti' sono i perdenti della selezione naturale."},
+  {q:"In quale racconto Svevo narra di un vecchio che cede alle lusinghe di una giovane?",opts:["Una burla riuscita","Corto viaggio sentimentale","La novella del buon vecchio e della bella fanciulla","Il malocchio"],c:2,exp:"'La novella del buon vecchio e della bella fanciulla' (1929, postumo) è uno degli ultimi racconti di Svevo."},
+  {q:"Chi è Guido Speier ne 'La coscienza di Zeno'?",opts:["Il padre di Zeno","Il medico analista","Il cognato e socio commerciale di Zeno, che si suicida per davvero","Un amico d'infanzia"],c:2,exp:"Guido Speier è il marito di Ada e socio di Zeno. Si suicida davvero, a differenza dei 'tentennamenti' di Zeno."},
+  {q:"Perché Svevo si convertì al cattolicesimo nel 1896?",opts:["Per convinzione religiosa","Per insegnare nelle scuole cattoliche","Per sposare Livia Veneziani, di famiglia cattolica","Per la cittadinanza italiana"],c:2,exp:"Svevo si convertì per sposare Livia Veneziani. Ma mantenne sempre un'identità ebraica interiore."},
+  {q:"Cosa rappresenta la sigaretta ne 'La coscienza di Zeno'?",opts:["Un piacere borghese","La metafora della volontà impotente e dell'autoingano perpetuo","Un simbolo di ribellione giovanile","Un elemento senza significato simbolico"],c:1,exp:"La sigaretta è la grande metafora dell'inettitudine: ogni 'ultima sigaretta' è l'inizio di una nuova serie."},
+  {q:"Come si suicida Alfonso Nitti alla fine di 'Una vita'?",opts:["Si getta in mare","Si avvelena","Si spara","La morte non è esplicitata"],c:0,exp:"Alfonso Nitti si getta in mare: il suicidio è l'unico atto davvero decisivo della sua esistenza."},
+  {q:"Quale scrittore triestino contemporaneo di Svevo è noto per il 'Canzoniere'?",opts:["Carlo Michelstaedter","Scipio Slataper","Umberto Saba","Giani Stuparich"],c:2,exp:"Umberto Saba visse a Trieste nello stesso periodo di Svevo e scrisse il 'Canzoniere'."},
+  {q:"Come si chiama l'analista di Zeno nel romanzo?",opts:["Dottor Freud","Dottor Maller","Dottor S.","Dottor Balli"],c:2,exp:"L'analista di Zeno è indicato solo come 'dottor S.' — anonimato che allude a Freud."},
+  {q:"In quale istituto studiò Svevo in Germania?",opts:["Il Ginnasio di Berlino","L'istituto di commercio di Segnitz sul Meno","L'università di Heidelberg","Il conservatorio di Monaco"],c:1,exp:"Svevo frequentò un istituto di commercio a Segnitz sul Meno, in Baviera."},
+  {q:"Come sono strutturati i capitoli de 'La coscienza di Zeno'?",opts:["Cronologicamente, dall'infanzia alla vecchiaia","Per capitoli tematici non cronologici","Come lettere a diversi destinatari","Per anni scolari"],c:1,exp:"'La coscienza di Zeno' è organizzata per capitoli tematici: il fumo, la morte del padre, il matrimonio, l'amante, il socio."},
+  {q:"Qual è il tema del capitolo 'La morte del padre'?",opts:["Il lutto elaborato razionalmente","L'ambiguità dello schiaffo del padre morente, tra benedizione e punizione","Il rapporto con la madre","La riconciliazione con il fratello"],c:1,exp:"Lo schiaffo finale del padre morente — benedizione o punizione? — è emblema del conflitto edipico irrisolto di Zeno."},
+  {q:"Cosa significa 'narratore inattendibile'?",opts:["Il narratore è ubriaco","Il narratore mente a se stesso e al lettore, rivelando la verità involontariamente","Il narratore non conosce i fatti","Il narratore è un bambino"],c:1,exp:"Il narratore inattendibile mente a se stesso prima che al lettore: la verità emerge dai suoi stessi errori e autoinganni."},
+  {q:"Quale raccolta poetica scrisse Umberto Saba, contemporaneo triestino di Svevo?",opts:["Ossi di seppia","Il canzoniere","Myricae","Le occasioni"],c:1,exp:"Umberto Saba scrisse il 'Canzoniere'. Sia Saba che Svevo vissero a Trieste nello stesso periodo."},
+];
+
+// ── Form: validazione + controllo email ───────────────────────
+function showAlert(type, html) {
+  var box = document.getElementById('formAlert');
+  box.className = 'alert-box alert-' + type;
+  box.innerHTML = html;
+}
+function clearAlert() {
+  var box = document.getElementById('formAlert');
+  box.className = '';
+  box.innerHTML = '';
+}
+
+function validateForm() {
+  clearAlert();
+  var ok = true;
+  ['nome','cognome','classe','sezione'].forEach(function(f) {
+    var v = document.getElementById('f-'+f).value.trim();
+    var e = document.getElementById('err-'+f);
+    if (!v) { e.classList.add('show'); document.getElementById('f-'+f).classList.add('err-field'); ok = false; }
+    else     { e.classList.remove('show'); document.getElementById('f-'+f).classList.remove('err-field'); }
+  });
+  var em = document.getElementById('f-email').value.trim();
+  var ee = document.getElementById('err-email');
+  if (!em || !em.includes('@') || !em.toLowerCase().endsWith('.edu.it')) {
+    ee.classList.add('show'); document.getElementById('f-email').classList.add('err-field'); ok = false;
+  } else {
+    ee.classList.remove('show'); document.getElementById('f-email').classList.remove('err-field');
+  }
+  if (!ok) return;
+
+  // Salva dati studente subito
+  student = {
+    nome:    document.getElementById('f-nome').value.trim(),
+    cognome: document.getElementById('f-cognome').value.trim(),
+    classe:  document.getElementById('f-classe').value.trim(),
+    sezione: document.getElementById('f-sezione').value.trim(),
+    email:   em
+  };
+
+  var btn = document.getElementById('btnGo');
+  btn.textContent = 'Controllo in corso...';
+  btn.disabled = true;
+
+  // Timeout di sicurezza: se lo storage non risponde entro 2s, procedi
+  var timedOut = false;
+  var safetyTimer = setTimeout(function() {
+    timedOut = true;
+    btn.disabled = false;
+    btn.textContent = 'Inizia la Verifica — 20 domande, 30 secondi ciascuna';
+    startQuiz();
+  }, 2000);
+
+  storageGet(emailKey(em)).then(function(val) {
+    if (timedOut) return; // già partito
+    clearTimeout(safetyTimer);
+    btn.disabled = false;
+    btn.textContent = 'Inizia la Verifica — 20 domande, 30 secondi ciascuna';
+    if (val) {
+      try {
+        var data = JSON.parse(val);
+        showAlert('err',
+          'L\'indirizzo <strong>' + em + '</strong> ha gi\u00e0 completato la verifica il <strong>' +
+          data.date + '</strong> con punteggio <strong>' + data.score + '/20</strong>. ' +
+          'La verifica pu\u00f2 essere effettuata una sola volta per email.'
+        );
+      } catch(e) {
+        showAlert('err', 'Questa email ha gi\u00e0 svolto la verifica.');
+      }
+    } else {
+      startQuiz();
+    }
+  }).catch(function() {
+    if (timedOut) return;
+    clearTimeout(safetyTimer);
+    btn.disabled = false;
+    btn.textContent = 'Inizia la Verifica — 20 domande, 30 secondi ciascuna';
+    startQuiz();
+  });
+}
+
+// ── Quiz ──────────────────────────────────────────────────────
+function shuffle(a) { return a.sort(function(){ return Math.random() - .5; }); }
+
+function startQuiz() {
+  selQ = shuffle(ALL_Q.slice()).slice(0, 20);
+  curIdx = 0; score = 0; okC = 0; koC = 0; toC = 0; answers = [];
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('visible'); });
+  document.getElementById('sec-quiz').classList.add('visible');
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  window.scrollTo(0, 0);
+  loadQ();
+}
+
+function loadQ() {
+  answered = false;
+  var q = selQ[curIdx];
+  document.getElementById('qMeta').textContent = 'Domanda ' + (curIdx+1) + ' di 20';
+  document.getElementById('qPts').textContent  = 'Punteggio: ' + score;
+  document.getElementById('qText').textContent = q.q;
+  var od = document.getElementById('qOpts'); od.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button');
+    b.className = 'opt'; b.textContent = o;
+    b.onclick = function(){ answer(i); };
+    od.appendChild(b);
+  });
+  document.getElementById('fbBox').className = 'fb';
+  document.getElementById('fbBox').innerHTML = '';
+  document.getElementById('btnQNext').className = 'btn-qnext';
+  document.getElementById('btnQNext').textContent = curIdx < 19 ? 'Prossima domanda \u2192' : 'Vedi risultato \u2192';
+  startTimer();
+}
+
+function startTimer() {
+  tLeft = 30; updateTimer();
+  if (tInterval) clearInterval(tInterval);
+  tInterval = setInterval(function(){
+    tLeft--;
+    updateTimer();
+    if (tLeft <= 0) { clearInterval(tInterval); if (!answered) doTimeout(); }
+  }, 1000);
+}
+
+function updateTimer() {
+  var pct = (tLeft / 30) * 100;
+  var bar = document.getElementById('tBar'), num = document.getElementById('tNum');
+  bar.style.width = pct + '%';
+  var u = tLeft <= 8;
+  bar.className = 't-inner' + (u ? ' urgent' : '');
+  num.className = 't-num' + (u ? ' urgent' : '');
+  num.textContent = tLeft;
+}
+
+function answer(idx) {
+  if (answered) return;
+  answered = true; clearInterval(tInterval);
+  var q = selQ[curIdx];
+  var btns = document.getElementById('qOpts').querySelectorAll('.opt');
+  btns.forEach(function(b, i){
+    b.disabled = true;
+    if (i === q.c) b.classList.add('correct');
+    else if (i === idx && idx !== q.c) b.classList.add('wrong');
+  });
+  var fb = document.getElementById('fbBox');
+  var isOk = (idx === q.c);
+  if (isOk) { okC++; score++; fb.className = 'fb ok show'; fb.innerHTML = '&#10003; Corretto! ' + q.exp; }
+  else       { koC++;          fb.className = 'fb ko show'; fb.innerHTML = '&#10007; Sbagliato. ' + q.exp; }
+  answers.push({ q:q.q, opts:q.opts, c:q.c, chosen:idx, st:isOk?'ok':'ko', exp:q.exp });
+  document.getElementById('btnQNext').className = 'btn-qnext show';
+}
+
+function doTimeout() {
+  answered = true; toC++;
+  var q = selQ[curIdx];
+  document.getElementById('qOpts').querySelectorAll('.opt').forEach(function(b, i){
+    b.disabled = true; if (i === q.c) b.classList.add('reveal');
+  });
+  var fb = document.getElementById('fbBox'); fb.className = 'fb to show';
+  fb.innerHTML = '&#9201; Tempo scaduto! Risposta corretta: <strong>' + q.opts[q.c] + '</strong>. ' + q.exp;
+  answers.push({ q:q.q, opts:q.opts, c:q.c, chosen:-1, st:'to', exp:q.exp });
+  document.getElementById('btnQNext').className = 'btn-qnext show';
+}
+
+function nextQ() {
+  curIdx++;
+  if (curIdx >= 20) showResult(); else loadQ();
+}
+
+function showResult() {
+  clearInterval(tInterval);
+  var pct = Math.round((score / 20) * 100);
+  var ds = new Date().toLocaleDateString('it-IT', {day:'2-digit', month:'long', year:'numeric'});
+
+  // Salva il risultato nello storage
+  storageSet(emailKey(student.email), JSON.stringify({ score:score, pct:pct, date:ds, nome:student.nome, cognome:student.cognome }));
+
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('visible'); });
+  document.getElementById('sec-result').classList.add('visible');
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  window.scrollTo(0, 0);
+
+  document.getElementById('rScore').textContent = score;
+  document.getElementById('rb-ok').textContent  = okC;
+  document.getElementById('rb-ko').textContent  = koC;
+  document.getElementById('rb-to').textContent  = toC;
+  document.getElementById('rb-pct').textContent = pct + '%';
+
+  var grade, msg;
+  if (pct >= 90)      { grade='Eccellente'; msg='"La vita attuale \u00e8 inquinata alle radici" \u2014 ma tu la conosci a fondo. Ottima preparazione.'; }
+  else if (pct >= 75) { grade='Ottimo';     msg='Conosci bene Svevo. Rileggi i testi delle sezioni in cui hai sbagliato.'; }
+  else if (pct >= 55) { grade='Sufficiente'; msg='Hai lasciato qualche sigaretta non spenta. Ripassa le opere e la poetica.'; }
+  else                { grade='Insufficiente'; msg='Come Zeno, non ti arrendere. Rileggi la lezione dall\'inizio.'; }
+  document.getElementById('rGrade').textContent = grade;
+  document.getElementById('rMsg').textContent   = msg;
+
+  var ri = document.getElementById('revItems'); ri.innerHTML = '';
+  answers.forEach(function(a, i) {
+    var div = document.createElement('div');
+    var cls='rev-item ', badge='', bCls='';
+    if      (a.st==='ok') { cls+='ok-i'; badge='Corretta';      bCls='b-ok'; }
+    else if (a.st==='ko') { cls+='ko-i'; badge='Sbagliata';     bCls='b-ko'; }
+    else                  { cls+='to-i'; badge='Tempo scaduto'; bCls='b-to'; }
+    div.className = cls;
+    var html = '<span class="rev-badge '+bCls+'">'+badge+'</span>'
+      + '<div class="rev-q">'+(i+1)+'. '+a.q+'</div>';
+    if (a.st==='ko') {
+      html += '<div class="rev-ans">Tua risposta: <strong style="color:var(--ko)">'+a.opts[a.chosen]+'</strong></div>'
+            + '<div class="rev-ans">Risposta corretta: <strong style="color:var(--ok)">'+a.opts[a.c]+'</strong></div>';
+    } else {
+      html += '<div class="rev-ans">Risposta corretta: <strong style="color:var(--ok)">'+a.opts[a.c]+'</strong></div>';
+    }
+    html += '<div class="rev-exp">'+a.exp+'</div>';
+    div.innerHTML = html; ri.appendChild(div);
+  });
+}
+
+// ── PDF completo ──────────────────────────────────────────────
+function dlPDF() {
+  if (typeof window.jspdf === 'undefined') { alert('Libreria PDF non ancora caricata. Riprova tra qualche secondo.'); return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit:'mm', format:'a4' });
+  var W=210, margin=14, usable=W-margin*2;
+  var pct=Math.round((score/20)*100);
+
+  function addPage() {
+    doc.addPage();
+    return margin;
+  }
+  function checkY(y, needed) {
+    if (y + needed > 274) { y = addPage(); }
+    return y;
+  }
+
+  // COPERTINA
+  doc.setFillColor(26,45,107); doc.rect(0,0,W,297,'F');
+  doc.setFont('times','italic'); doc.setFontSize(11); doc.setTextColor(160,180,220);
+  doc.text('Letteratura Italiana del Novecento', W/2, 52, {align:'center'});
+  doc.setFont('times','bold'); doc.setFontSize(26); doc.setTextColor(255,255,255);
+  doc.text('CERTIFICATO DI VERIFICA', W/2, 70, {align:'center'});
+  doc.setDrawColor(74,127,212); doc.setLineWidth(0.4); doc.line(margin+10,78,W-margin-10,78);
+  doc.setFont('times','italic'); doc.setFontSize(13); doc.setTextColor(160,180,220);
+  doc.text('Si certifica che', W/2, 96, {align:'center'});
+  doc.setFont('times','bold'); doc.setFontSize(22); doc.setTextColor(255,255,255);
+  doc.text(student.nome + ' ' + student.cognome, W/2, 112, {align:'center'});
+  doc.setFont('times','normal'); doc.setFontSize(11); doc.setTextColor(160,180,220);
+  doc.text('Classe '+student.classe+' \u2014 Sezione '+student.sezione+'   |   '+student.email, W/2, 123, {align:'center'});
+  doc.line(margin+10,130,W-margin-10,130);
+  doc.setFont('times','italic'); doc.setFontSize(12); doc.setTextColor(160,180,220);
+  doc.text('ha completato la verifica su', W/2, 146, {align:'center'});
+  doc.setFont('times','bold'); doc.setFontSize(22); doc.setTextColor(255,255,255);
+  doc.text('Italo Svevo', W/2, 162, {align:'center'});
+
+  doc.setFillColor(30,58,115);
+  doc.roundedRect(W/2-30,172,60,30,4,4,'F');
+  doc.setDrawColor(74,127,212); doc.setLineWidth(0.5);
+  doc.roundedRect(W/2-30,172,60,30,4,4,'S');
+  doc.setFont('times','bold'); doc.setFontSize(28); doc.setTextColor(255,255,255);
+  doc.text(score+'/20', W/2, 188, {align:'center'});
+  doc.setFont('times','normal'); doc.setFontSize(11); doc.setTextColor(160,180,220);
+  doc.text('('+pct+'%)', W/2, 197, {align:'center'});
+
+  var gTxt=pct>=90?'Eccellente':pct>=75?'Ottimo':pct>=55?'Sufficiente':'Insufficiente';
+  doc.setFont('times','bold'); doc.setFontSize(13); doc.setTextColor(255,255,255);
+  doc.text('Valutazione: '+gTxt, W/2, 212, {align:'center'});
+  doc.line(margin+10,220,W-margin-10,220);
+  doc.setFont('times','normal'); doc.setFontSize(10); doc.setTextColor(160,180,220);
+  doc.text('Corrette: '+okC+'   |   Sbagliate: '+koC+'   |   Timeout: '+toC, W/2, 230, {align:'center'});
+  doc.setFont('times','italic'); doc.setFontSize(11); doc.setTextColor(130,150,195);
+  doc.text('"La vita attuale \u00e8 inquinata alle radici."', W/2, 248, {align:'center'});
+  doc.setFontSize(9);
+  doc.text('\u2014 Italo Svevo, La coscienza di Zeno (1923)', W/2, 256, {align:'center'});
+  var ds=new Date().toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
+  doc.setFontSize(8); doc.setTextColor(110,130,170);
+  doc.text('Data: '+ds+'   |   20 domande su banco di 40 \u2014 30 secondi per domanda', W/2, 272, {align:'center'});
+
+  // PAGINE DOMANDE
+  var y = addPage();
+
+  // Intestazione
+  doc.setFont('times','bold'); doc.setFontSize(14); doc.setTextColor(26,45,107);
+  doc.text('Dettaglio verifica \u2014 Tutte le domande', margin, y); y += 4;
+  doc.setDrawColor(48,88,200); doc.setLineWidth(0.5);
+  doc.line(margin, y, W-margin, y); y += 8;
+
+  answers.forEach(function(a, i) {
+    var isOk = a.st==='ok', isTo = a.st==='to', isKo = a.st==='ko';
+    var badgeBg  = isOk?[232,245,236]:isTo?[255,251,235]:[254,240,240];
+    var badgeFg  = isOk?[30,122,64]:isTo?[146,96,10]:[185,28,28];
+    var badgeTxt = isOk?'CORRETTA':isTo?'TEMPO SCADUTO':'SBAGLIATA';
+
+    // stima altezza blocco
+    doc.setFontSize(10.5);
+    var qLines = doc.splitTextToSize((i+1)+'. '+a.q, usable);
+    doc.setFontSize(9.5);
+    var corrLines = doc.splitTextToSize('Risposta corretta: '+a.opts[a.c], usable);
+    var wrongLines = isKo ? doc.splitTextToSize('Risposta data: '+a.opts[a.chosen], usable) : [];
+    doc.setFontSize(9);
+    var expLines = doc.splitTextToSize(a.exp, usable-3);
+    var blockH = 8 + qLines.length*5 + corrLines.length*4.5 + wrongLines.length*4.5 + expLines.length*4 + 8;
+    y = checkY(y, blockH);
+
+    // Badge
+    doc.setFillColor.apply(doc, badgeBg);
+    doc.roundedRect(margin, y, 33, 5.5, 1, 1, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(7);
+    doc.setTextColor.apply(doc, badgeFg);
+    doc.text(badgeTxt, margin+16.5, y+3.8, {align:'center'});
+    y += 7;
+
+    // Domanda
+    doc.setFont('times','bold'); doc.setFontSize(10.5); doc.setTextColor(26,45,107);
+    qLines.forEach(function(l){ doc.text(l, margin, y); y += 5; });
+
+    // Risposta corretta
+    doc.setFont('times','normal'); doc.setFontSize(9.5); doc.setTextColor(30,122,64);
+    corrLines.forEach(function(l){ doc.text(l, margin+3, y); y += 4.5; });
+
+    // Risposta sbagliata (solo se ko)
+    if (isKo) {
+      doc.setFont('times','normal'); doc.setFontSize(9.5); doc.setTextColor(185,28,28);
+      wrongLines.forEach(function(l){ doc.text(l, margin+3, y); y += 4.5; });
+    }
+
+    // Spiegazione
+    doc.setFont('times','italic'); doc.setFontSize(9); doc.setTextColor(100,110,140);
+    expLines.forEach(function(l){ doc.text(l, margin+3, y); y += 4; });
+
+    y += 2;
+    doc.setDrawColor(210,213,232); doc.setLineWidth(0.3);
+    doc.line(margin, y, W-margin, y);
+    y += 5;
+  });
+
+  doc.save('Verifica_Svevo_'+student.cognome+'_'+student.nome+'.pdf');
+}
+</script>
